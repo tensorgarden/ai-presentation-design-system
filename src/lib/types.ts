@@ -38,10 +38,26 @@ export interface ContentReview {
   timeEstimate: string;
 }
 
+export interface AccessibilityIssue {
+  slideId: string;
+  type: "contrast" | "font-size" | "alt-text" | "color-blind";
+  severity: "minor" | "major" | "critical";
+  description: string;
+  recommendation: string;
+}
+
+export interface AccessibilityReport {
+  deckId: string;
+  overallScore: number; // 0-100
+  passes: boolean; // true if overallScore >= 70 and no critical issues
+  issues: AccessibilityIssue[];
+}
+
 export interface PresentationSnapshot {
   brands: BrandProfile[];
   activeDeck: Deck | null;
   narrativeAnalysis: NarrativeAnalysis | null;
   contentReview: ContentReview | null;
   designTokens: DesignToken[];
+  accessibilityReport: AccessibilityReport | null;
 }

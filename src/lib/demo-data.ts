@@ -1,4 +1,4 @@
-import type { BrandProfile, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
+import type { AccessibilityReport, BrandProfile, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -45,6 +45,41 @@ export const demoNarrativeAnalysis: NarrativeAnalysis = {
   ]
 };
 
+const accessibilityIssues = [
+  {
+    slideId: "s2", type: "font-size" as const, severity: "major" as const,
+    description: "Body text at 47 words with no hierarchy — read aloud time exceeds 25 seconds. Presentation audiences can't read and listen simultaneously.",
+    recommendation: "Reduce body to 2-3 bullet points. Font size should be ≥ 24pt for body text in conference-room settings."
+  },
+  {
+    slideId: "s3", type: "contrast" as const, severity: "critical" as const,
+    description: "Side-by-side bar chart uses #e94560 (accent red) on #fafafa background. Contrast ratio 4.1:1 — passes AA for large text but fails AAA for body labels.",
+    recommendation: "Darken chart labels to #1a1a2e (ratio 13.4:1) or increase label font weight to 700 for the accent color."
+  },
+  {
+    slideId: "s3", type: "color-blind" as const, severity: "major" as const,
+    description: "Comparison slide relies on red/green color coding for early-stage (red) vs growth-stage (green). Deuteranopia affects ~5% of male viewers.",
+    recommendation: "Add pattern fills (stripes for underperforming) or use blue/orange palette instead of red/green."
+  },
+  {
+    slideId: "s4", type: "contrast" as const, severity: "major" as const,
+    description: "Metric card numbers at 14px in #1a1a2e on #fafafa background are acceptable (ratio 13.4:1), but trend annotations in #16213e on #fafafa at 10px may be illegible.",
+    recommendation: "Set annotation font size to ≥ 12px or use #1a1a2e for consistency."
+  },
+  {
+    slideId: "s5", type: "alt-text" as const, severity: "major" as const,
+    description: "Scatter plot has no alt text or accessible data table. Screen-reader users cannot interpret the CS staffing vs churn relationship.",
+    recommendation: "Add descriptive alt text ('Scatter plot: CS hires per $1M ARR vs monthly churn rate, with benchmark line at 1.2 CS/$M ARR') and a linked data table."
+  }
+];
+
+export const demoAccessibilityReport: AccessibilityReport = {
+  deckId: "deck_nova_q3",
+  overallScore: 58,
+  passes: false,
+  issues: accessibilityIssues
+};
+
 const contentFlags: ContentFlag[] = [
   { slideId: "s2", issue: "Dense text — 47 words in body. Recommended: 25–35 for a narrative slide.", severity: "minor", suggestion: "Split into two slides or reduce to the key headline: '$47M growth, 3 companies at $10M+ ARR, but early-stage churn rising.'" },
   { slideId: "s5", issue: "No visual label on scatter plot axes.", severity: "major", suggestion: "Add axis labels: X-axis = CS hires per $1M ARR, Y-axis = monthly churn rate. Include the benchmark reference line." },
@@ -75,5 +110,6 @@ export const demoSnapshot: PresentationSnapshot = {
   activeDeck: demoDeck,
   narrativeAnalysis: demoNarrativeAnalysis,
   contentReview: demoContentReview,
-  designTokens: demoDesignTokens
+  designTokens: demoDesignTokens,
+  accessibilityReport: demoAccessibilityReport
 };

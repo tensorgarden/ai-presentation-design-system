@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens } from "@/lib/demo-data";
+import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport } from "@/lib/demo-data";
 
 describe("deck", () => {
   it("has 8 slides", () => expect(demoDeck.slides).toHaveLength(8));
@@ -34,5 +34,31 @@ describe("design tokens", () => {
     const cats = new Set(demoDesignTokens.map(t => t.category));
     expect(cats.has("color")).toBe(true);
     expect(cats.has("typography")).toBe(true);
+  });
+});
+
+describe("accessibility report", () => {
+  it("scores below 70 and fails", () => {
+    expect(demoAccessibilityReport.overallScore).toBeLessThan(70);
+    expect(demoAccessibilityReport.passes).toBe(false);
+  });
+
+  it("has issues across multiple accessibility categories", () => {
+    const types = new Set(demoAccessibilityReport.issues.map(i => i.type));
+    // Should cover contrast, font-size, alt-text, and color-blind
+    expect(types.size).toBeGreaterThanOrEqual(3);
+    expect(types.has("contrast")).toBe(true);
+  });
+
+  it("has at least one critical issue", () => {
+    const criticals = demoAccessibilityReport.issues.filter(i => i.severity === "critical");
+    expect(criticals.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("all issues reference valid slide IDs", () => {
+    const slideIds = new Set(demoDeck.slides.map(s => s.id));
+    for (const issue of demoAccessibilityReport.issues) {
+      expect(slideIds.has(issue.slideId)).toBe(true);
+    }
   });
 });
