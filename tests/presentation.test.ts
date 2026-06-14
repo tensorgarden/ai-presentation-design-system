@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport } from "@/lib/demo-data";
+import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport } from "@/lib/demo-data";
 
 describe("deck", () => {
   it("has 8 slides", () => expect(demoDeck.slides).toHaveLength(8));
@@ -34,6 +34,42 @@ describe("design tokens", () => {
     const cats = new Set(demoDesignTokens.map(t => t.category));
     expect(cats.has("color")).toBe(true);
     expect(cats.has("typography")).toBe(true);
+  });
+});
+
+describe("brand consistency report", () => {
+  it("has issues across multiple check types", () => {
+    const types = new Set(demoBrandConsistencyReport.issues.map(i => i.checkType));
+    expect(types.size).toBeGreaterThanOrEqual(3);
+    expect(types.has("color-mismatch")).toBe(true);
+    expect(types.has("font-mismatch")).toBe(true);
+  });
+
+  it("fails when score is below 80", () => {
+    expect(demoBrandConsistencyReport.overallScore).toBeLessThan(80);
+    expect(demoBrandConsistencyReport.passes).toBe(false);
+  });
+
+  it("scores at least 50 for a partially-compliant deck", () => {
+    expect(demoBrandConsistencyReport.overallScore).toBeGreaterThanOrEqual(50);
+  });
+
+  it("all issues reference valid slide IDs", () => {
+    const slideIds = new Set(demoDeck.slides.map(s => s.id));
+    for (const issue of demoBrandConsistencyReport.issues) {
+      expect(slideIds.has(issue.slideId)).toBe(true);
+    }
+  });
+
+  it("has at least one auto-fixable issue", () => {
+    const autoFixable = demoBrandConsistencyReport.issues.filter(i => i.autoFixable);
+    expect(autoFixable.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("every issue has a non-empty recommendation", () => {
+    for (const issue of demoBrandConsistencyReport.issues) {
+      expect(issue.recommendation.length).toBeGreaterThan(10);
+    }
   });
 });
 

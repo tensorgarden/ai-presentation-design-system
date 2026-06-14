@@ -53,6 +53,23 @@ export interface AccessibilityReport {
   issues: AccessibilityIssue[];
 }
 
+export interface BrandConsistencyIssue {
+  slideId: string;
+  checkType: "color-mismatch" | "font-mismatch" | "logo-missing" | "spacing-violation" | "token-override";
+  severity: "minor" | "major" | "critical";
+  description: string;
+  recommendation: string;
+  autoFixable: boolean;
+}
+
+export interface BrandConsistencyReport {
+  deckId: string;
+  brandId: string;
+  overallScore: number; // 0-100 — percentage of slides passing brand checks
+  passes: boolean; // true if overallScore >= 80 and no critical issues
+  issues: BrandConsistencyIssue[];
+}
+
 export interface PresentationSnapshot {
   brands: BrandProfile[];
   activeDeck: Deck | null;
@@ -60,4 +77,5 @@ export interface PresentationSnapshot {
   contentReview: ContentReview | null;
   designTokens: DesignToken[];
   accessibilityReport: AccessibilityReport | null;
+  brandConsistencyReport: BrandConsistencyReport | null;
 }

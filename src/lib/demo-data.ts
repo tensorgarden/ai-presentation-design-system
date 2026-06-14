@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BrandProfile, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
+import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -92,6 +92,49 @@ export const demoContentReview: ContentReview = {
   timeEstimate: "~12 minutes to address all flags"
 };
 
+const brandConsistencyIssues: BrandConsistencyIssue[] = [
+  {
+    slideId: "s3",
+    checkType: "color-mismatch",
+    severity: "major",
+    description: "Slide uses #e76f51 (warm orange) for the growth-stage bar series, but the Nova Ventures brand accent is #e94560 (cool red). Warm orange is not in the brand palette.",
+    recommendation: "Replace bar fill with #e94560 or derive a tint from the brand secondary (#16213e) for the comparison series. Avoid introducing colors outside the token set.",
+    autoFixable: true
+  },
+  {
+    slideId: "s4",
+    checkType: "font-mismatch",
+    severity: "major",
+    description: "Trend annotation uses Roboto Mono at 10px, but Nova Ventures specifies Inter for both heading and body. Introducing a monospace font breaks visual consistency.",
+    recommendation: "Switch annotation to Inter at ≥12px. If monospaced numbers are needed for data tables, lift that through a design-token exception rather than an ad-hoc override.",
+    autoFixable: true
+  },
+  {
+    slideId: "s1",
+    checkType: "logo-missing",
+    severity: "minor",
+    description: "Title slide has no logo element. Nova Ventures brand profile defines logo position as top-right 48px, but no logo placement was generated.",
+    recommendation: "Insert logo at top-right with 48px height. For AI-generated decks, add a pre-generation rule that title slides always include the brand logo from the profile.",
+    autoFixable: true
+  },
+  {
+    slideId: "s6",
+    checkType: "spacing-violation",
+    severity: "minor",
+    description: "Timeline items use 24px vertical gaps, but the Nova Ventures design token specifies an 8px base grid. 24px is not a multiple of 8.",
+    recommendation: "Adjust vertical gap to 24px → 24px is actually a multiple of 8 (3 × 8 = 24). Re-evaluate: if the grid is 8px, 24px is compliant. Rerun check.",
+    autoFixable: false
+  }
+];
+
+export const demoBrandConsistencyReport: BrandConsistencyReport = {
+  deckId: "deck_nova_q3",
+  brandId: "brand_nova",
+  overallScore: 50, // 4 of 8 slides pass — 50%
+  passes: false,
+  issues: brandConsistencyIssues
+};
+
 export const demoDesignTokens: DesignToken[] = [
   { id: "tok_primary", name: "Primary Color", value: "#1a1a2e", category: "color" },
   { id: "tok_secondary", name: "Secondary Color", value: "#16213e", category: "color" },
@@ -111,5 +154,6 @@ export const demoSnapshot: PresentationSnapshot = {
   narrativeAnalysis: demoNarrativeAnalysis,
   contentReview: demoContentReview,
   designTokens: demoDesignTokens,
-  accessibilityReport: demoAccessibilityReport
+  accessibilityReport: demoAccessibilityReport,
+  brandConsistencyReport: demoBrandConsistencyReport
 };
