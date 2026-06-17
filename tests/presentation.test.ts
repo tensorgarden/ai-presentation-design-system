@@ -50,8 +50,8 @@ describe("brand consistency report", () => {
     expect(demoBrandConsistencyReport.passes).toBe(false);
   });
 
-  it("scores at least 50 for a partially-compliant deck", () => {
-    expect(demoBrandConsistencyReport.overallScore).toBeGreaterThanOrEqual(50);
+  it("scores at least 40 for a partially-compliant deck with token overrides", () => {
+    expect(demoBrandConsistencyReport.overallScore).toBeGreaterThanOrEqual(40);
   });
 
   it("all issues reference valid slide IDs", () => {
@@ -64,6 +64,14 @@ describe("brand consistency report", () => {
   it("has at least one auto-fixable issue", () => {
     const autoFixable = demoBrandConsistencyReport.issues.filter(i => i.autoFixable);
     expect(autoFixable.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("flags token overrides where AI defaults replace brand design tokens", () => {
+    const tokenOverrides = demoBrandConsistencyReport.issues.filter(i => i.checkType === "token-override");
+    expect(tokenOverrides.length).toBeGreaterThanOrEqual(1);
+    for (const issue of tokenOverrides) {
+      expect(issue.description).toContain("design token");
+    }
   });
 
   it("every issue has a non-empty recommendation", () => {

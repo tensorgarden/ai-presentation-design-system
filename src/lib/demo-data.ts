@@ -121,16 +121,24 @@ const brandConsistencyIssues: BrandConsistencyIssue[] = [
     slideId: "s6",
     checkType: "spacing-violation",
     severity: "minor",
-    description: "Timeline items use 24px vertical gaps, but the Nova Ventures design token specifies an 8px base grid. 24px is not a multiple of 8.",
-    recommendation: "Adjust vertical gap to 24px → 24px is actually a multiple of 8 (3 × 8 = 24). Re-evaluate: if the grid is 8px, 24px is compliant. Rerun check.",
-    autoFixable: false
+    description: "Timeline items use 20px vertical gaps, but the Nova Ventures design token specifies an 8px base grid. 20px is not a multiple of 8 — the nearest compliant values are 16px or 24px.",
+    recommendation: "Adjust vertical gap from 20px to 24px (3 × 8). If tighter spacing is intentional, use 16px (2 × 8) with smaller timeline icons. Either option keeps the layout on the brand grid.",
+    autoFixable: true
+  },
+  {
+    slideId: "s7",
+    checkType: "token-override",
+    severity: "major",
+    description: "ROI breakdown chart uses #10b981 (Tailwind emerald) for positive bar segments, a palette color not defined in Nova Ventures design tokens. The brand secondary (#16213e) or a derived tint should be used instead. AI slide generators frequently default to framework defaults rather than brand token values.",
+    recommendation: "Replace #10b981 bar fills with a tint derived from the brand secondary (#16213e) — for example, #2a4a7a at 60% opacity for positive segments. Define a chart-palette token set (positive, negative, neutral) in the design token registry so the AI generator has explicit instructions rather than falling back to framework defaults.",
+    autoFixable: true
   }
 ];
 
 export const demoBrandConsistencyReport: BrandConsistencyReport = {
   deckId: "deck_nova_q3",
   brandId: "brand_nova",
-  overallScore: 50, // 4 of 8 slides pass — 50%
+  overallScore: 44, // 4 of 8 slides pass — 50%. Extra weight for the token-override on the high-impact ROI slide.
   passes: false,
   issues: brandConsistencyIssues
 };
