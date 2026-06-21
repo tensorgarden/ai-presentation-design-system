@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport } from "@/lib/demo-data";
+import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport, demoContentDensityReport } from "@/lib/demo-data";
 
 describe("deck", () => {
   it("has 8 slides", () => expect(demoDeck.slides).toHaveLength(8));
@@ -103,6 +103,58 @@ describe("accessibility report", () => {
     const slideIds = new Set(demoDeck.slides.map(s => s.id));
     for (const issue of demoAccessibilityReport.issues) {
       expect(slideIds.has(issue.slideId)).toBe(true);
+    }
+  });
+});
+
+describe("content density report", () => {
+  it("scores below 80 and fails when over half the slides exceed density limits", () => {
+    expect(demoContentDensityReport.overallScore).toBeLessThan(80);
+    expect(demoContentDensityReport.passes).toBe(false);
+  });
+
+  it("flags at least one critical density issue", () => {
+    const criticals = demoContentDensityReport.issues.filter(i => i.severity === "critical");
+    expect(criticals.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("total words and average words are internally consistent", () => {
+    const sum = demoDeck.slides.reduce((acc, s) => acc + s.wordCount, 0);
+    expect(demoContentDensityReport.totalWords).toBe(sum);
+    expect(demoContentDensityReport.averageWordsPerSlide).toBeCloseTo(sum / demoDeck.slides.length, 1);
+  });
+
+  it("all issues reference valid slide IDs", () => {
+    const slideIds = new Set(demoDeck.slides.map(s => s.id));
+    for (const issue of demoContentDensityReport.issues) {
+      expect(slideIds.has(issue.slideId)).toBe(true);
+    }
+  });
+
+  it("every flagged slide's actual word count matches the issue's reported word count", () => {
+    const wordCounts = new Map(demoDeck.slides.map(s => [s.id, s.wordCount]));
+    for (const issue of demoContentDensityReport.issues) {
+      expect(issue.wordCount).toBe(wordCounts.get(issue.slideId));
+    }
+  });
+
+  it("every issue's word count exceeds the recommended maximum for its content type", () => {
+    for (const issue of demoContentDensityReport.issues) {
+      expect(issue.wordCount).toBeGreaterThan(issue.recommendedMax);
+    }
+  });
+
+  it("every issue has a non-empty description and recommendation", () => {
+    for (const issue of demoContentDensityReport.issues) {
+      expect(issue.description.length).toBeGreaterThan(20);
+      expect(issue.recommendation.length).toBeGreaterThan(20);
+    }
+  });
+
+  it("reports content types consistent with the flagged slide", () => {
+    const types = new Map(demoDeck.slides.map(s => [s.id, s.contentType]));
+    for (const issue of demoContentDensityReport.issues) {
+      expect(issue.contentType).toBe(types.get(issue.slideId));
     }
   });
 });

@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
+import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -16,14 +16,14 @@ export const demoBrands: BrandProfile[] = [
 ];
 
 const novaSlides: Slide[] = [
-  { id: "s1", deckId: "deck_nova_q3", position: 1, contentType: "title", title: "Q3 2026 Portfolio Review", body: "Nova Ventures — Confidential", visual: "logo-top-right", notes: "30-second intro", narrativeStrength: 85, flagged: false },
-  { id: "s2", deckId: "deck_nova_q3", position: 2, contentType: "narrative", title: "Where We Are: $340M AUM Across 28 Portfolio Companies", body: "Our portfolio delivered $47M in aggregate revenue growth this quarter. Three companies crossed $10M ARR. Two are preparing Series B. But churn in the early-stage cohort is up 3.2 percentage points — our biggest risk signal.", visual: "metric-card-grid", notes: "Context slide — frame the problem before the data", narrativeStrength: 72, flagged: false },
-  { id: "s3", deckId: "deck_nova_q3", position: 3, contentType: "comparison", title: "Early-Stage vs Growth-Stage Performance", body: "Early-stage cohort: 4.8% monthly churn, $1.2M avg burn rate, 18-month runway. Growth-stage cohort: 1.1% monthly churn, 92% NRR, 9 of 12 companies cash-flow positive.", visual: "side-by-side-bars", notes: "Comparison makes the churn problem concrete", narrativeStrength: 90, flagged: false },
-  { id: "s4", deckId: "deck_nova_q3", position: 4, contentType: "metric", title: "Churn Rate by Cohort: The Early-Stage Gap", body: "4.8% churn vs 2.1% benchmark. At current trajectory, early-stage portfolio loses $3.1M in annual recurring revenue by Q1 2027.", visual: "trend-line-chart", notes: "Single metric, big impact", narrativeStrength: 88, flagged: false },
-  { id: "s5", deckId: "deck_nova_q3", position: 5, contentType: "evidence", title: "Root Cause: Customer Success Staffing Gap", body: "Our five earliest portfolio companies average 0.4 CS hires per $1M ARR. Industry benchmark is 1.2. Companies above 0.8 CS hires show 80% lower churn. This is a fixable operational gap — not a market problem.", visual: "scatter-plot", notes: "Diagnosis before prescription", narrativeStrength: 93, flagged: false },
-  { id: "s6", deckId: "deck_nova_q3", position: 6, contentType: "timeline", title: "90-Day Intervention Plan", body: "Week 1–2: CS gap audit across early-stage cohort. Week 3–6: Embedded CS advisor deployment (shared across 3 companies). Week 7–12: Bi-weekly churn review with portfolio founders. Target: reduce early-stage churn to 3.2% by Q4.", visual: "timeline-horizontal", notes: "Concrete, time-boxed plan", narrativeStrength: 86, flagged: false },
-  { id: "s7", deckId: "deck_nova_q3", position: 7, contentType: "metric", title: "Projected Impact: $2.1M Annual Revenue Saved", body: "Conservative estimate: reducing churn from 4.8% to 3.2% saves $2.1M in annual recurring revenue across the early-stage cohort. Investment required: $240K for embedded CS advisors. 8.75x projected return.", visual: "roi-breakdown", notes: "Close with the ROI", narrativeStrength: 91, flagged: false },
-  { id: "s8", deckId: "deck_nova_q3", position: 8, contentType: "cta", title: "Recommendation", body: "Approve $240K for embedded CS advisor program targeting early-stage portfolio companies. Review churn metrics at the October partner meeting.", visual: "cta-card", notes: "Clear ask, clear timeline", narrativeStrength: 84, flagged: false }
+  { id: "s1", deckId: "deck_nova_q3", position: 1, contentType: "title", title: "Q3 2026 Portfolio Review", body: "Nova Ventures — Confidential", visual: "logo-top-right", notes: "30-second intro", narrativeStrength: 85, flagged: false, wordCount: 4, estimatedReadTimeSeconds: 1 },
+  { id: "s2", deckId: "deck_nova_q3", position: 2, contentType: "narrative", title: "Where We Are: $340M AUM Across 28 Portfolio Companies", body: "Our portfolio delivered $47M in aggregate revenue growth this quarter. Three companies crossed $10M ARR. Two are preparing Series B. But churn in the early-stage cohort is up 3.2 percentage points — our biggest risk signal.", visual: "metric-card-grid", notes: "Context slide — frame the problem before the data", narrativeStrength: 72, flagged: false, wordCount: 44, estimatedReadTimeSeconds: 18 },
+  { id: "s3", deckId: "deck_nova_q3", position: 3, contentType: "comparison", title: "Early-Stage vs Growth-Stage Performance", body: "Early-stage cohort: 4.8% monthly churn, $1.2M avg burn rate, 18-month runway. Growth-stage cohort: 1.1% monthly churn, 92% NRR, 9 of 12 companies cash-flow positive.", visual: "side-by-side-bars", notes: "Comparison makes the churn problem concrete", narrativeStrength: 90, flagged: false, wordCount: 32, estimatedReadTimeSeconds: 13 },
+  { id: "s4", deckId: "deck_nova_q3", position: 4, contentType: "metric", title: "Churn Rate by Cohort: The Early-Stage Gap", body: "4.8% churn vs 2.1% benchmark. At current trajectory, early-stage portfolio loses $3.1M in annual recurring revenue by Q1 2027.", visual: "trend-line-chart", notes: "Single metric, big impact", narrativeStrength: 88, flagged: false, wordCount: 26, estimatedReadTimeSeconds: 11 },
+  { id: "s5", deckId: "deck_nova_q3", position: 5, contentType: "evidence", title: "Root Cause: Customer Success Staffing Gap", body: "Our five earliest portfolio companies average 0.4 CS hires per $1M ARR. Industry benchmark is 1.2. Companies above 0.8 CS hires show 80% lower churn. This is a fixable operational gap — not a market problem.", visual: "scatter-plot", notes: "Diagnosis before prescription", narrativeStrength: 93, flagged: false, wordCount: 43, estimatedReadTimeSeconds: 17 },
+  { id: "s6", deckId: "deck_nova_q3", position: 6, contentType: "timeline", title: "90-Day Intervention Plan", body: "Week 1–2: CS gap audit across early-stage cohort. Week 3–6: Embedded CS advisor deployment (shared across 3 companies). Week 7–12: Bi-weekly churn review with portfolio founders. Target: reduce early-stage churn to 3.2% by Q4.", visual: "timeline-horizontal", notes: "Concrete, time-boxed plan", narrativeStrength: 86, flagged: false, wordCount: 38, estimatedReadTimeSeconds: 16 },
+  { id: "s7", deckId: "deck_nova_q3", position: 7, contentType: "metric", title: "Projected Impact: $2.1M Annual Revenue Saved", body: "Conservative estimate: reducing churn from 4.8% to 3.2% saves $2.1M in annual recurring revenue across the early-stage cohort. Investment required: $240K for embedded CS advisors. 8.75x projected return.", visual: "roi-breakdown", notes: "Close with the ROI", narrativeStrength: 91, flagged: false, wordCount: 34, estimatedReadTimeSeconds: 14 },
+  { id: "s8", deckId: "deck_nova_q3", position: 8, contentType: "cta", title: "Recommendation", body: "Approve $240K for embedded CS advisor program targeting early-stage portfolio companies. Review churn metrics at the October partner meeting.", visual: "cta-card", notes: "Clear ask, clear timeline", narrativeStrength: 84, flagged: false, wordCount: 22, estimatedReadTimeSeconds: 9 }
 ];
 
 export const demoDeck: Deck = {
@@ -156,6 +156,54 @@ export const demoDesignTokens: DesignToken[] = [
   { id: "tok_logo", name: "Logo Position", value: "Top-right, 48px", category: "logo" }
 ];
 
+const contentDensityIssues: ContentDensityIssue[] = [
+  {
+    slideId: "s2",
+    contentType: "narrative",
+    wordCount: 44,
+    recommendedMax: 30,
+    severity: "critical",
+    description: "Narrative slide contains 44 words — 47% over the recommended maximum of 30 for context-setting slides. Combined with the dense metric-card-grid visual, the audience will read the slide instead of listening. AI generators frequently pack too much copy into slides because they optimize for completeness over comprehension.",
+    recommendation: "Split into two slides: one titled 'The Good News' ($47M revenue, 3 companies at $10M+ ARR) and one titled 'The Risk Signal' (early-stage churn up 3.2pp). Or reduce body to the lead headline: '$47M growth, but early-stage churn is rising — our biggest risk signal.'"
+  },
+  {
+    slideId: "s5",
+    contentType: "evidence",
+    wordCount: 43,
+    recommendedMax: 35,
+    severity: "major",
+    description: "Evidence slide at 43 words — 23% above the recommended 35-word ceiling. The scatter-plot visual carries the quantitative story, but the body restates every data point the chart already shows. This is a common AI-generation failure: the model treats text and visuals as independent delivery channels instead of complementary ones.",
+    recommendation: "Reduce body to the key insight only: 'Companies above 0.8 CS hires show 80% lower churn. This is a staffing gap — not a market problem.' Let the scatter plot and axis labels deliver the data. Add the benchmark reference line to the chart."
+  },
+  {
+    slideId: "s6",
+    contentType: "timeline",
+    wordCount: 38,
+    recommendedMax: 25,
+    severity: "major",
+    description: "Timeline slide at 38 words — 52% over the recommended 25-word max for timeline content. Each phase (audit, deploy, review) is written as a full sentence when a three-column layout with phase labels, dates, and 5-7 words each would be more scannable.",
+    recommendation: "Restructure as three timeline columns: Phase 1 (Weeks 1-2) 'CS gap audit — early-stage cohort', Phase 2 (Weeks 3-6) 'Embedded CS advisor deployment — 3 companies', Phase 3 (Weeks 7-12) 'Bi-weekly churn review with founders'. Move the target metric to a separate footer."
+  },
+  {
+    slideId: "s4",
+    contentType: "metric",
+    wordCount: 26,
+    recommendedMax: 20,
+    severity: "minor",
+    description: "Metric slide at 26 words — 30% over the recommended 20-word ceiling for single-metric slides. The trend-line chart already communicates the trajectory; the body repeats the headline data point with additional projection text that belongs in speaker notes.",
+    recommendation: "Keep only the metric callout on-slide: '4.8% monthly churn vs 2.1% benchmark.' Move the projected revenue impact to the speaker notes or to a follow-up ROI slide (s7 already covers this)."
+  }
+];
+
+export const demoContentDensityReport: ContentDensityReport = {
+  deckId: "deck_nova_q3",
+  overallScore: 50, // 4 of 8 slides pass density limits per their content type
+  passes: false,
+  totalWords: 243,
+  averageWordsPerSlide: 30.4,
+  issues: contentDensityIssues
+};
+
 export const demoSnapshot: PresentationSnapshot = {
   brands: demoBrands,
   activeDeck: demoDeck,
@@ -163,5 +211,6 @@ export const demoSnapshot: PresentationSnapshot = {
   contentReview: demoContentReview,
   designTokens: demoDesignTokens,
   accessibilityReport: demoAccessibilityReport,
-  brandConsistencyReport: demoBrandConsistencyReport
+  brandConsistencyReport: demoBrandConsistencyReport,
+  contentDensityReport: demoContentDensityReport
 };

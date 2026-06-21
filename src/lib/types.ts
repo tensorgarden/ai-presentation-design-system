@@ -15,6 +15,27 @@ export interface Slide {
   id: string; deckId: string; position: number;
   contentType: SlideContentType; title: string; body: string;
   visual: string; notes: string; narrativeStrength: number; flagged: boolean;
+  wordCount: number;
+  estimatedReadTimeSeconds: number;
+}
+
+export interface ContentDensityIssue {
+  slideId: string;
+  contentType: SlideContentType;
+  wordCount: number;
+  recommendedMax: number;
+  severity: "minor" | "major" | "critical";
+  description: string;
+  recommendation: string;
+}
+
+export interface ContentDensityReport {
+  deckId: string;
+  overallScore: number; // 0-100 — percentage of slides within density limits
+  passes: boolean; // true if overallScore >= 80 and no critical issues
+  totalWords: number;
+  averageWordsPerSlide: number;
+  issues: ContentDensityIssue[];
 }
 
 export interface Deck {
@@ -78,4 +99,5 @@ export interface PresentationSnapshot {
   designTokens: DesignToken[];
   accessibilityReport: AccessibilityReport | null;
   brandConsistencyReport: BrandConsistencyReport | null;
+  contentDensityReport: ContentDensityReport | null;
 }
