@@ -1,4 +1,4 @@
-import { demoBrands, demoContentReview, demoDeck, demoDesignTokens, demoNarrativeAnalysis } from "@/lib/demo-data";
+import { demoBrands, demoContentReview, demoDeck, demoDesignTokens, demoNarrativeAnalysis, demoStructureAuditReport } from "@/lib/demo-data";
 
 function Badge({ children, tone = "slate" }: { children: React.ReactNode; tone?: string }) {
   const t: Record<string, string> = { slate: "border-slate-200 bg-white text-slate-700", green: "border-emerald-200 bg-emerald-50 text-emerald-700", red: "border-red-200 bg-red-50 text-red-700", amber: "border-amber-200 bg-amber-50 text-amber-800", purple: "border-indigo-200 bg-indigo-50 text-indigo-700" };
@@ -69,8 +69,8 @@ export default function Home() {
         </div>
       </Card>
 
-      {/* NARRATIVE ANALYSIS + CONTENT REVIEW */}
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+      {/* NARRATIVE ANALYSIS + CONTENT REVIEW + STRUCTURE AUDIT */}
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card>
           <h2 className="text-xl font-bold text-slate-950">Narrative Intelligence</h2>
           {demoNarrativeAnalysis && (
@@ -125,6 +125,29 @@ export default function Home() {
               </div>
             </>
           )}
+        </Card>
+
+        <Card>
+          <h2 className="text-xl font-bold text-slate-950">Structure Audit</h2>
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-3xl font-black text-indigo-700">{demoStructureAuditReport.structureFirstScore}</span>
+            <span className="text-sm text-slate-400">/ 100 · {demoStructureAuditReport.insightDensity.replace("-", " ")}</span>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Checks whether the deck follows a structure-first flow: one sharp idea per slide, clear proof anchors, and an explicit decision path for executives.
+          </p>
+          <div className="mt-4 space-y-3">
+            {demoStructureAuditReport.issues.map(issue => (
+              <div key={`${issue.slideId}-${issue.checkType}`} className={`rounded-xl border p-3 ${issue.severity === "critical" ? "border-red-200 bg-red-50/30" : "border-amber-100 bg-amber-50/20"}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold text-slate-400">Slide {issue.slideId}</span>
+                  <Badge tone={issue.severity === "critical" ? "red" : "amber"}>{issue.checkType}</Badge>
+                </div>
+                <p className="mt-1 text-sm font-medium text-slate-800">{issue.description}</p>
+                <p className="mt-1 text-xs text-slate-500">{issue.recommendation}</p>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
 

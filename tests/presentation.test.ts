@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport, demoContentDensityReport } from "@/lib/demo-data";
+import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport, demoContentDensityReport, demoStructureAuditReport } from "@/lib/demo-data";
 
 describe("deck", () => {
   it("has 8 slides", () => expect(demoDeck.slides).toHaveLength(8));
@@ -155,6 +155,29 @@ describe("content density report", () => {
     const types = new Map(demoDeck.slides.map(s => [s.id, s.contentType]));
     for (const issue of demoContentDensityReport.issues) {
       expect(issue.contentType).toBe(types.get(issue.slideId));
+    }
+  });
+});
+
+describe("structure audit report", () => {
+  it("fails decks with critical structure-first issues", () => {
+    expect(demoStructureAuditReport.structureFirstScore).toBeLessThan(80);
+    expect(demoStructureAuditReport.passes).toBe(false);
+    expect(demoStructureAuditReport.issues.some(issue => issue.severity === "critical")).toBe(true);
+  });
+
+  it("flags one-sharp-idea and decision-path problems", () => {
+    const checkTypes = new Set(demoStructureAuditReport.issues.map(issue => issue.checkType));
+    expect(checkTypes.has("single-idea")).toBe(true);
+    expect(checkTypes.has("decision-path")).toBe(true);
+  });
+
+  it("references valid slides and actionable recommendations", () => {
+    const slideIds = new Set(demoDeck.slides.map(slide => slide.id));
+    for (const issue of demoStructureAuditReport.issues) {
+      expect(slideIds.has(issue.slideId)).toBe(true);
+      expect(issue.description.length).toBeGreaterThan(30);
+      expect(issue.recommendation.length).toBeGreaterThan(30);
     }
   });
 });

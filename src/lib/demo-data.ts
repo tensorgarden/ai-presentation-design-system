@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide } from "./types";
+import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, StructureAuditIssue, StructureAuditReport } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -204,6 +204,38 @@ export const demoContentDensityReport: ContentDensityReport = {
   issues: contentDensityIssues
 };
 
+const structureAuditIssues: StructureAuditIssue[] = [
+  {
+    slideId: "s2",
+    checkType: "single-idea",
+    severity: "critical",
+    description: "Context slide mixes three positive portfolio updates with the churn risk signal. Structure-first presentation reviews expect one sharp idea per slide so the audience does not have to decide what matters while the presenter is speaking.",
+    recommendation: "Split slide 2 into separate 'Momentum' and 'Risk Signal' slides, or rewrite the body around a single headline: '$47M growth, but early-stage churn is rising.'"
+  },
+  {
+    slideId: "s5",
+    checkType: "supporting-evidence",
+    severity: "major",
+    description: "The evidence slide correctly names a fixable staffing gap, but it does not label which data point is the proof anchor. AI-generated decks often look polished while leaving executives unsure which evidence supports the recommendation.",
+    recommendation: "Add a proof-anchor caption under the scatter plot: 'Companies above 0.8 CS hires per $1M ARR show 80% lower churn.' Keep the body focused on the implication."
+  },
+  {
+    slideId: "s8",
+    checkType: "decision-path",
+    severity: "major",
+    description: "CTA names the requested budget and review forum, but it omits the decision deadline and first owner. A boardroom deck should make the next decision path explicit instead of leaving follow-up to meeting notes.",
+    recommendation: "Add 'Decision needed by September 15; operating partner owns advisor onboarding by October 1' so the close is actionable immediately after the meeting."
+  }
+];
+
+export const demoStructureAuditReport: StructureAuditReport = {
+  deckId: "deck_nova_q3",
+  structureFirstScore: 63,
+  passes: false,
+  insightDensity: "too-dense",
+  issues: structureAuditIssues
+};
+
 export const demoSnapshot: PresentationSnapshot = {
   brands: demoBrands,
   activeDeck: demoDeck,
@@ -212,5 +244,6 @@ export const demoSnapshot: PresentationSnapshot = {
   designTokens: demoDesignTokens,
   accessibilityReport: demoAccessibilityReport,
   brandConsistencyReport: demoBrandConsistencyReport,
-  contentDensityReport: demoContentDensityReport
+  contentDensityReport: demoContentDensityReport,
+  structureAuditReport: demoStructureAuditReport
 };

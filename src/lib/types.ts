@@ -38,6 +38,22 @@ export interface ContentDensityReport {
   issues: ContentDensityIssue[];
 }
 
+export interface StructureAuditIssue {
+  slideId: string;
+  checkType: "single-idea" | "audience-context" | "decision-path" | "supporting-evidence";
+  severity: "minor" | "major" | "critical";
+  description: string;
+  recommendation: string;
+}
+
+export interface StructureAuditReport {
+  deckId: string;
+  structureFirstScore: number; // 0-100 - measures whether the deck is organized around one sharp insight per slide
+  passes: boolean; // true if structureFirstScore >= 80 and no critical issues
+  insightDensity: "too-dense" | "balanced" | "too-sparse";
+  issues: StructureAuditIssue[];
+}
+
 export interface Deck {
   id: string; brandId: string; title: string; description: string;
   slideCount: number; narrativeScore: number; createdBy: string;
@@ -100,4 +116,5 @@ export interface PresentationSnapshot {
   accessibilityReport: AccessibilityReport | null;
   brandConsistencyReport: BrandConsistencyReport | null;
   contentDensityReport: ContentDensityReport | null;
+  structureAuditReport: StructureAuditReport | null;
 }
