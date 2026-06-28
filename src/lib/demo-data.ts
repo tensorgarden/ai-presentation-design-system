@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, StructureAuditIssue, StructureAuditReport } from "./types";
+import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, SourceEvidence, SourceVerificationIssue, SourceVerificationReport, SourceVerifiedClaim, StructureAuditIssue, StructureAuditReport } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -236,6 +236,84 @@ export const demoStructureAuditReport: StructureAuditReport = {
   issues: structureAuditIssues
 };
 
+const sourceEvidence: SourceEvidence[] = [
+  {
+    id: "src_q3_operating_metrics",
+    title: "Nova Q3 portfolio metrics workbook",
+    sourceType: "uploaded-file",
+    location: "data-room/nova-q3-portfolio-metrics.xlsx#PortfolioSummary",
+    retrievedAt: "2026-06-18",
+    linkedSlideIds: ["s2", "s3", "s7"]
+  },
+  {
+    id: "src_cs_staffing_benchmark",
+    title: "Customer-success staffing benchmark packet",
+    sourceType: "benchmark",
+    location: "uploaded-benchmark/cs-staffing-2026.pdf#page=7",
+    retrievedAt: "2026-06-18",
+    linkedSlideIds: ["s4", "s5"]
+  },
+  {
+    id: "src_founder_churn_notes",
+    title: "Founder churn review call notes",
+    sourceType: "analyst-note",
+    location: "notes/2026-06-19-founder-churn-review.md#root-cause",
+    retrievedAt: "2026-06-19",
+    linkedSlideIds: ["s5", "s6"]
+  }
+];
+
+const sourceVerifiedClaims: SourceVerifiedClaim[] = [
+  {
+    slideId: "s2",
+    claim: "$47M aggregate portfolio revenue growth this quarter",
+    evidenceId: "src_q3_operating_metrics",
+    status: "verified",
+    confidence: 0.96,
+    reviewedBy: "Operating partner",
+    lastChecked: "2026-06-20"
+  },
+  {
+    slideId: "s4",
+    claim: "Early-stage churn is 4.8% versus a 2.1% benchmark",
+    evidenceId: "src_cs_staffing_benchmark",
+    status: "verified",
+    confidence: 0.92,
+    reviewedBy: "Portfolio analyst",
+    lastChecked: "2026-06-20"
+  },
+  {
+    slideId: "s5",
+    claim: "Companies above 0.8 customer-success hires show materially lower churn",
+    evidenceId: "src_founder_churn_notes",
+    status: "verified",
+    confidence: 0.88,
+    reviewedBy: "Portfolio analyst",
+    lastChecked: "2026-06-21"
+  }
+];
+
+const sourceVerificationIssues: SourceVerificationIssue[] = [
+  {
+    slideId: "s7",
+    claim: "8.75x projected return from the embedded CS advisor program",
+    status: "needs-review",
+    severity: "major",
+    description: "ROI math is derived from a working scenario model, but the deck does not yet reference a locked model version. AI-generated decks can make unsupported financial claims look final when citations are missing or stale.",
+    reviewerAction: "Attach the approved model version and finance reviewer before the slide is used in an LP or board meeting."
+  }
+];
+
+export const demoSourceVerificationReport: SourceVerificationReport = {
+  deckId: "deck_nova_q3",
+  passes: false,
+  verifiedClaimCount: sourceVerifiedClaims.length,
+  claimsNeedingReview: sourceVerificationIssues.length,
+  evidenceSources: sourceEvidence,
+  verifiedClaims: sourceVerifiedClaims,
+  issues: sourceVerificationIssues
+};
+
 export const demoSnapshot: PresentationSnapshot = {
   brands: demoBrands,
   activeDeck: demoDeck,
@@ -245,5 +323,6 @@ export const demoSnapshot: PresentationSnapshot = {
   accessibilityReport: demoAccessibilityReport,
   brandConsistencyReport: demoBrandConsistencyReport,
   contentDensityReport: demoContentDensityReport,
-  structureAuditReport: demoStructureAuditReport
+  structureAuditReport: demoStructureAuditReport,
+  sourceVerificationReport: demoSourceVerificationReport
 };

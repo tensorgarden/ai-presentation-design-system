@@ -54,6 +54,46 @@ export interface StructureAuditReport {
   issues: StructureAuditIssue[];
 }
 
+export type SourceVerificationStatus = "verified" | "needs-review" | "missing-source";
+
+export interface SourceEvidence {
+  id: string;
+  title: string;
+  sourceType: "uploaded-file" | "data-room" | "analyst-note" | "benchmark";
+  location: string;
+  retrievedAt: string;
+  linkedSlideIds: string[];
+}
+
+export interface SourceVerifiedClaim {
+  slideId: string;
+  claim: string;
+  evidenceId: string;
+  status: SourceVerificationStatus;
+  confidence: number;
+  reviewedBy: string;
+  lastChecked: string;
+}
+
+export interface SourceVerificationIssue {
+  slideId: string;
+  claim: string;
+  status: Exclude<SourceVerificationStatus, "verified">;
+  severity: "minor" | "major" | "critical";
+  description: string;
+  reviewerAction: string;
+}
+
+export interface SourceVerificationReport {
+  deckId: string;
+  passes: boolean;
+  verifiedClaimCount: number;
+  claimsNeedingReview: number;
+  evidenceSources: SourceEvidence[];
+  verifiedClaims: SourceVerifiedClaim[];
+  issues: SourceVerificationIssue[];
+}
+
 export interface Deck {
   id: string; brandId: string; title: string; description: string;
   slideCount: number; narrativeScore: number; createdBy: string;
@@ -117,4 +157,5 @@ export interface PresentationSnapshot {
   brandConsistencyReport: BrandConsistencyReport | null;
   contentDensityReport: ContentDensityReport | null;
   structureAuditReport: StructureAuditReport | null;
+  sourceVerificationReport: SourceVerificationReport | null;
 }

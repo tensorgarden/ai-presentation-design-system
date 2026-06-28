@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport, demoContentDensityReport, demoStructureAuditReport } from "@/lib/demo-data";
+import { demoDeck, demoNarrativeAnalysis, demoContentReview, demoDesignTokens, demoAccessibilityReport, demoBrandConsistencyReport, demoContentDensityReport, demoStructureAuditReport, demoSourceVerificationReport } from "@/lib/demo-data";
 
 describe("deck", () => {
   it("has 8 slides", () => expect(demoDeck.slides).toHaveLength(8));
@@ -179,5 +179,38 @@ describe("structure audit report", () => {
       expect(issue.description.length).toBeGreaterThan(30);
       expect(issue.recommendation.length).toBeGreaterThan(30);
     }
+  });
+});
+
+describe("source verification report", () => {
+  it("keeps verified claims anchored to valid slides and evidence sources", () => {
+    const slideIds = new Set(demoDeck.slides.map(slide => slide.id));
+    const sourceIds = new Set(demoSourceVerificationReport.evidenceSources.map(source => source.id));
+
+    for (const claim of demoSourceVerificationReport.verifiedClaims) {
+      expect(slideIds.has(claim.slideId)).toBe(true);
+      expect(sourceIds.has(claim.evidenceId)).toBe(true);
+      expect(claim.status).toBe("verified");
+      expect(claim.confidence).toBeGreaterThan(0.8);
+    }
+  });
+
+  it("fails the report when a board-facing financial claim still needs review", () => {
+    expect(demoSourceVerificationReport.passes).toBe(false);
+    expect(demoSourceVerificationReport.claimsNeedingReview).toBeGreaterThanOrEqual(1);
+    expect(demoSourceVerificationReport.issues.some(issue => issue.severity === "major" && issue.status === "needs-review")).toBe(true);
+  });
+
+  it("records retrievable source locations instead of free-floating citations", () => {
+    for (const source of demoSourceVerificationReport.evidenceSources) {
+      expect(source.location.length).toBeGreaterThan(20);
+      expect(source.linkedSlideIds.length).toBeGreaterThanOrEqual(1);
+      expect(source.retrievedAt).toMatch(/^2026-06-/);
+    }
+  });
+
+  it("keeps claim counts internally consistent", () => {
+    expect(demoSourceVerificationReport.verifiedClaimCount).toBe(demoSourceVerificationReport.verifiedClaims.length);
+    expect(demoSourceVerificationReport.claimsNeedingReview).toBe(demoSourceVerificationReport.issues.length);
   });
 });

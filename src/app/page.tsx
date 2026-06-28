@@ -1,4 +1,4 @@
-import { demoBrands, demoContentReview, demoDeck, demoDesignTokens, demoNarrativeAnalysis, demoStructureAuditReport } from "@/lib/demo-data";
+import { demoBrands, demoContentReview, demoDeck, demoDesignTokens, demoNarrativeAnalysis, demoSourceVerificationReport, demoStructureAuditReport } from "@/lib/demo-data";
 
 function Badge({ children, tone = "slate" }: { children: React.ReactNode; tone?: string }) {
   const t: Record<string, string> = { slate: "border-slate-200 bg-white text-slate-700", green: "border-emerald-200 bg-emerald-50 text-emerald-700", red: "border-red-200 bg-red-50 text-red-700", amber: "border-amber-200 bg-amber-50 text-amber-800", purple: "border-indigo-200 bg-indigo-50 text-indigo-700" };
@@ -150,6 +150,55 @@ export default function Home() {
           </div>
         </Card>
       </div>
+
+
+      {/* SOURCE VERIFICATION */}
+      <Card>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-slate-950">Source Verification</h2>
+            <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">
+              Source-first checks catch AI-generated deck claims that look polished but are not yet backed by uploaded evidence, reviewer sign-off, or a retrievable citation anchor.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge tone={demoSourceVerificationReport.passes ? "green" : "amber"}>
+              {demoSourceVerificationReport.passes ? "ready" : "review needed"}
+            </Badge>
+            <Badge>{demoSourceVerificationReport.verifiedClaimCount} verified claims</Badge>
+            <Badge tone="amber">{demoSourceVerificationReport.claimsNeedingReview} review item</Badge>
+          </div>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-3">
+          {demoSourceVerificationReport.verifiedClaims.map(claim => {
+            const source = demoSourceVerificationReport.evidenceSources.find(item => item.id === claim.evidenceId);
+            return (
+              <div key={`${claim.slideId}-${claim.evidenceId}`} className="rounded-2xl border border-emerald-100 bg-emerald-50/30 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Slide {claim.slideId}</span>
+                  <Badge tone="green">{Math.round(claim.confidence * 100)}% confidence</Badge>
+                </div>
+                <p className="mt-2 text-sm font-semibold text-slate-900">{claim.claim}</p>
+                <p className="mt-2 text-xs leading-5 text-slate-500">Source: {source?.title ?? "Missing source"}</p>
+                <p className="mt-1 text-xs text-slate-400">Reviewed by {claim.reviewedBy} on {claim.lastChecked}</p>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-4 space-y-3">
+          {demoSourceVerificationReport.issues.map(issue => (
+            <div key={`${issue.slideId}-${issue.claim}`} className="rounded-2xl border border-amber-200 bg-amber-50/40 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-amber-800">Slide {issue.slideId} · {issue.status}</span>
+                <Badge tone={issue.severity === "critical" ? "red" : "amber"}>{issue.severity}</Badge>
+              </div>
+              <p className="mt-2 text-sm font-semibold text-slate-900">{issue.claim}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">{issue.description}</p>
+              <p className="mt-2 text-xs font-medium text-amber-900">Reviewer action: {issue.reviewerAction}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
 
       {/* DESIGN TOKENS */}
       <Card>
