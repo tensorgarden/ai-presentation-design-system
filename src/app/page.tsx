@@ -167,6 +167,9 @@ export default function Home() {
             </Badge>
             <Badge>{demoSourceVerificationReport.verifiedClaimCount} verified claims</Badge>
             <Badge tone="amber">{demoSourceVerificationReport.claimsNeedingReview} review item</Badge>
+            <Badge tone={demoSourceVerificationReport.staleEvidenceCount > 0 ? "red" : "green"}>
+              {demoSourceVerificationReport.staleEvidenceCount} stale source
+            </Badge>
           </div>
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-3">
@@ -180,6 +183,8 @@ export default function Home() {
                 </div>
                 <p className="mt-2 text-sm font-semibold text-slate-900">{claim.claim}</p>
                 <p className="mt-2 text-xs leading-5 text-slate-500">Source: {source?.title ?? "Missing source"}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">Anchor: {source?.location ?? "Missing anchor"}</p>
+                <p className="mt-1 text-xs text-slate-400">Freshness: {source?.freshnessStatus ?? "unknown"} · expires {source?.expiresAt ?? "n/a"}</p>
                 <p className="mt-1 text-xs text-slate-400">Reviewed by {claim.reviewedBy} on {claim.lastChecked}</p>
               </div>
             );
@@ -194,7 +199,13 @@ export default function Home() {
               </div>
               <p className="mt-2 text-sm font-semibold text-slate-900">{issue.claim}</p>
               <p className="mt-1 text-xs leading-5 text-slate-600">{issue.description}</p>
+              {issue.evidenceId && (
+                <p className="mt-2 text-xs leading-5 text-slate-600">
+                  Evidence anchor: {demoSourceVerificationReport.evidenceSources.find(source => source.id === issue.evidenceId)?.title ?? issue.evidenceId}
+                </p>
+              )}
               <p className="mt-2 text-xs font-medium text-amber-900">Reviewer action: {issue.reviewerAction}</p>
+              {issue.blocksExternalUse && <p className="mt-1 text-xs font-semibold text-red-700">External use blocked until finance sign-off is attached.</p>}
             </div>
           ))}
         </div>

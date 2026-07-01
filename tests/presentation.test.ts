@@ -212,5 +212,33 @@ describe("source verification report", () => {
   it("keeps claim counts internally consistent", () => {
     expect(demoSourceVerificationReport.verifiedClaimCount).toBe(demoSourceVerificationReport.verifiedClaims.length);
     expect(demoSourceVerificationReport.claimsNeedingReview).toBe(demoSourceVerificationReport.issues.length);
+    expect(demoSourceVerificationReport.staleEvidenceCount).toBe(
+      demoSourceVerificationReport.evidenceSources.filter(source => source.freshnessStatus === "stale").length
+    );
+  });
+
+  it("keeps verified claims off stale evidence anchors", () => {
+    const sources = new Map(demoSourceVerificationReport.evidenceSources.map(source => [source.id, source]));
+
+    for (const claim of demoSourceVerificationReport.verifiedClaims) {
+      const source = sources.get(claim.evidenceId);
+      expect(source?.freshnessStatus).not.toBe("stale");
+      expect(Date.parse(source?.expiresAt ?? "")).not.toBeNaN();
+      expect(source?.owner.length ?? 0).toBeGreaterThan(3);
+    }
+  });
+
+  it("blocks external use when a financial claim depends on stale evidence", () => {
+    const staleSourceIds = new Set(
+      demoSourceVerificationReport.evidenceSources
+        .filter(source => source.freshnessStatus === "stale")
+        .map(source => source.id)
+    );
+
+    expect(demoSourceVerificationReport.issues.some(issue => (
+      issue.blocksExternalUse &&
+      issue.evidenceId !== undefined &&
+      staleSourceIds.has(issue.evidenceId)
+    ))).toBe(true);
   });
 });

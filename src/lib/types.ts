@@ -55,6 +55,7 @@ export interface StructureAuditReport {
 }
 
 export type SourceVerificationStatus = "verified" | "needs-review" | "missing-source";
+export type SourceFreshnessStatus = "current" | "expires-soon" | "stale";
 
 export interface SourceEvidence {
   id: string;
@@ -63,6 +64,9 @@ export interface SourceEvidence {
   location: string;
   retrievedAt: string;
   linkedSlideIds: string[];
+  owner: string;
+  expiresAt: string;
+  freshnessStatus: SourceFreshnessStatus;
 }
 
 export interface SourceVerifiedClaim {
@@ -78,10 +82,12 @@ export interface SourceVerifiedClaim {
 export interface SourceVerificationIssue {
   slideId: string;
   claim: string;
+  evidenceId?: string;
   status: Exclude<SourceVerificationStatus, "verified">;
   severity: "minor" | "major" | "critical";
   description: string;
   reviewerAction: string;
+  blocksExternalUse: boolean;
 }
 
 export interface SourceVerificationReport {
@@ -89,6 +95,7 @@ export interface SourceVerificationReport {
   passes: boolean;
   verifiedClaimCount: number;
   claimsNeedingReview: number;
+  staleEvidenceCount: number;
   evidenceSources: SourceEvidence[];
   verifiedClaims: SourceVerifiedClaim[];
   issues: SourceVerificationIssue[];

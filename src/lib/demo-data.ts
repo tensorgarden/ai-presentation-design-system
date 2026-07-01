@@ -243,7 +243,10 @@ const sourceEvidence: SourceEvidence[] = [
     sourceType: "uploaded-file",
     location: "data-room/nova-q3-portfolio-metrics.xlsx#PortfolioSummary",
     retrievedAt: "2026-06-18",
-    linkedSlideIds: ["s2", "s3", "s7"]
+    linkedSlideIds: ["s2", "s3", "s7"],
+    owner: "Portfolio operations",
+    expiresAt: "2026-07-18",
+    freshnessStatus: "current"
   },
   {
     id: "src_cs_staffing_benchmark",
@@ -251,7 +254,10 @@ const sourceEvidence: SourceEvidence[] = [
     sourceType: "benchmark",
     location: "uploaded-benchmark/cs-staffing-2026.pdf#page=7",
     retrievedAt: "2026-06-18",
-    linkedSlideIds: ["s4", "s5"]
+    linkedSlideIds: ["s4", "s5"],
+    owner: "Research lead",
+    expiresAt: "2026-07-18",
+    freshnessStatus: "current"
   },
   {
     id: "src_founder_churn_notes",
@@ -259,7 +265,21 @@ const sourceEvidence: SourceEvidence[] = [
     sourceType: "analyst-note",
     location: "notes/2026-06-19-founder-churn-review.md#root-cause",
     retrievedAt: "2026-06-19",
-    linkedSlideIds: ["s5", "s6"]
+    linkedSlideIds: ["s5", "s6"],
+    owner: "Portfolio analyst",
+    expiresAt: "2026-07-03",
+    freshnessStatus: "expires-soon"
+  },
+  {
+    id: "src_roi_working_model",
+    title: "Draft ROI scenario model v0.8",
+    sourceType: "data-room",
+    location: "data-room/nova-roi-scenario-model-v0.8.xlsx#InterventionROI!B12:H42",
+    retrievedAt: "2026-06-12",
+    linkedSlideIds: ["s7"],
+    owner: "Finance reviewer",
+    expiresAt: "2026-06-25",
+    freshnessStatus: "stale"
   }
 ];
 
@@ -297,10 +317,12 @@ const sourceVerificationIssues: SourceVerificationIssue[] = [
   {
     slideId: "s7",
     claim: "8.75x projected return from the embedded CS advisor program",
+    evidenceId: "src_roi_working_model",
     status: "needs-review",
     severity: "major",
-    description: "ROI math is derived from a working scenario model, but the deck does not yet reference a locked model version. AI-generated decks can make unsupported financial claims look final when citations are missing or stale.",
-    reviewerAction: "Attach the approved model version and finance reviewer before the slide is used in an LP or board meeting."
+    description: "ROI math is derived from a stale working scenario model rather than a locked finance-approved version. AI-generated decks can make unsupported financial claims look final when citations are missing or stale.",
+    reviewerAction: "Attach the approved model version and finance reviewer before the slide is used in an LP or board meeting.",
+    blocksExternalUse: true
   }
 ];
 
@@ -309,6 +331,7 @@ export const demoSourceVerificationReport: SourceVerificationReport = {
   passes: false,
   verifiedClaimCount: sourceVerifiedClaims.length,
   claimsNeedingReview: sourceVerificationIssues.length,
+  staleEvidenceCount: sourceEvidence.filter(source => source.freshnessStatus === "stale").length,
   evidenceSources: sourceEvidence,
   verifiedClaims: sourceVerifiedClaims,
   issues: sourceVerificationIssues
