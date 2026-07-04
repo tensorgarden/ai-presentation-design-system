@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, SourceEvidence, SourceVerificationIssue, SourceVerificationReport, SourceVerifiedClaim, StructureAuditIssue, StructureAuditReport } from "./types";
+import type { AccessibilityReport, BoardReadinessGate, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, SourceEvidence, SourceVerificationIssue, SourceVerificationReport, SourceVerifiedClaim, StructureAuditIssue, StructureAuditReport } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -326,6 +326,19 @@ const sourceVerificationIssues: SourceVerificationIssue[] = [
   }
 ];
 
+const boardReadinessGates: BoardReadinessGate[] = [
+  {
+    id: "gate_finance_roi_s7",
+    slideId: "s7",
+    claim: "8.75x projected return from the embedded CS advisor program",
+    gateType: "finance-signoff",
+    requiredApprover: "Finance reviewer",
+    dueBy: "2026-06-28",
+    status: "blocked",
+    blockingReason: "Board-facing ROI claim still points to stale scenario-model evidence; a named finance reviewer must attach the locked model before external use."
+  }
+];
+
 export const demoSourceVerificationReport: SourceVerificationReport = {
   deckId: "deck_nova_q3",
   passes: false,
@@ -334,7 +347,8 @@ export const demoSourceVerificationReport: SourceVerificationReport = {
   staleEvidenceCount: sourceEvidence.filter(source => source.freshnessStatus === "stale").length,
   evidenceSources: sourceEvidence,
   verifiedClaims: sourceVerifiedClaims,
-  issues: sourceVerificationIssues
+  issues: sourceVerificationIssues,
+  boardReadinessGates
 };
 
 export const demoSnapshot: PresentationSnapshot = {

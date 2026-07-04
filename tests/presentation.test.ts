@@ -241,4 +241,27 @@ describe("source verification report", () => {
       staleSourceIds.has(issue.evidenceId)
     ))).toBe(true);
   });
+
+  it("requires a named approver and due date for board-facing blocked claims", () => {
+    const blockedGates = demoSourceVerificationReport.boardReadinessGates.filter(gate => gate.status === "blocked");
+
+    expect(blockedGates.length).toBeGreaterThanOrEqual(1);
+    for (const gate of blockedGates) {
+      expect(gate.requiredApprover).toMatch(/reviewer|partner|lead/i);
+      expect(Date.parse(gate.dueBy)).not.toBeNaN();
+      expect(gate.blockingReason).toMatch(/stale|locked|review/i);
+    }
+  });
+
+  it("links blocked board-readiness gates to review-needed source issues", () => {
+    const reviewIssueKeys = new Set(
+      demoSourceVerificationReport.issues
+        .filter(issue => issue.blocksExternalUse)
+        .map(issue => `${issue.slideId}:${issue.claim}`)
+    );
+
+    for (const gate of demoSourceVerificationReport.boardReadinessGates.filter(gate => gate.status === "blocked")) {
+      expect(reviewIssueKeys.has(`${gate.slideId}:${gate.claim}`)).toBe(true);
+    }
+  });
 });

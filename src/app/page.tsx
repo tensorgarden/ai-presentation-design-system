@@ -170,6 +170,9 @@ export default function Home() {
             <Badge tone={demoSourceVerificationReport.staleEvidenceCount > 0 ? "red" : "green"}>
               {demoSourceVerificationReport.staleEvidenceCount} stale source
             </Badge>
+            <Badge tone={demoSourceVerificationReport.boardReadinessGates.some(gate => gate.status === "blocked") ? "red" : "green"}>
+              {demoSourceVerificationReport.boardReadinessGates.length} review gate
+            </Badge>
           </div>
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-3">
@@ -189,6 +192,19 @@ export default function Home() {
               </div>
             );
           })}
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {demoSourceVerificationReport.boardReadinessGates.map(gate => (
+            <div key={gate.id} className={`rounded-2xl border p-4 ${gate.status === "blocked" ? "border-red-200 bg-red-50/40" : "border-emerald-200 bg-emerald-50/30"}`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-red-800">Slide {gate.slideId} · {gate.gateType}</span>
+                <Badge tone={gate.status === "blocked" ? "red" : "green"}>{gate.status.replace("-", " ")}</Badge>
+              </div>
+              <p className="mt-2 text-sm font-semibold text-slate-900">{gate.claim}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">Required approver: {gate.requiredApprover} by {gate.dueBy}</p>
+              <p className="mt-2 text-xs leading-5 text-red-700">{gate.blockingReason}</p>
+            </div>
+          ))}
         </div>
         <div className="mt-4 space-y-3">
           {demoSourceVerificationReport.issues.map(issue => (

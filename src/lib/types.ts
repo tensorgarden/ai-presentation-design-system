@@ -90,6 +90,17 @@ export interface SourceVerificationIssue {
   blocksExternalUse: boolean;
 }
 
+export interface BoardReadinessGate {
+  id: string;
+  slideId: string;
+  claim: string;
+  gateType: "finance-signoff" | "citation-validation" | "source-refresh";
+  requiredApprover: string;
+  dueBy: string;
+  status: "blocked" | "ready-for-review" | "approved";
+  blockingReason: string;
+}
+
 export interface SourceVerificationReport {
   deckId: string;
   passes: boolean;
@@ -99,6 +110,7 @@ export interface SourceVerificationReport {
   evidenceSources: SourceEvidence[];
   verifiedClaims: SourceVerifiedClaim[];
   issues: SourceVerificationIssue[];
+  boardReadinessGates: BoardReadinessGate[];
 }
 
 export interface Deck {
