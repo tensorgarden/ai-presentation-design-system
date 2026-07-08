@@ -1,4 +1,4 @@
-import type { AccessibilityReport, BoardReadinessGate, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, SourceEvidence, SourceVerificationIssue, SourceVerificationReport, SourceVerifiedClaim, StructureAuditIssue, StructureAuditReport } from "./types";
+import type { AccessibilityReport, BoardReadinessGate, BrandConsistencyIssue, BrandConsistencyReport, BrandProfile, ContentDensityIssue, ContentDensityReport, ContentFlag, ContentReview, Deck, DesignToken, NarrativeAnalysis, PresentationSnapshot, Slide, SourceEvidence, SourceExportGuard, SourceVerificationIssue, SourceVerificationReport, SourceVerifiedClaim, StructureAuditIssue, StructureAuditReport } from "./types";
 
 export const demoBrands: BrandProfile[] = [
   {
@@ -339,6 +339,19 @@ const boardReadinessGates: BoardReadinessGate[] = [
   }
 ];
 
+const blockedExternalSourceIssues = sourceVerificationIssues.filter(issue => issue.blocksExternalUse);
+
+const sourceExportGuard: SourceExportGuard = {
+  deckId: "deck_nova_q3",
+  status: "blocked",
+  blockedClaimCount: blockedExternalSourceIssues.length,
+  blockedSlideIds: Array.from(new Set(blockedExternalSourceIssues.map(issue => issue.slideId))),
+  reason: "Deck export blocked: board-facing ROI claim relies on stale scenario-model evidence. Attach locked finance-approved source evidence before PDF or share-link export.",
+  nextReviewer: boardReadinessGates.find(gate => gate.status === "blocked")?.requiredApprover ?? "Finance reviewer",
+  dueBy: boardReadinessGates.find(gate => gate.status === "blocked")?.dueBy ?? "2026-06-28",
+  callout: "Pre-export guard prevents polished AI slides with unverified financial citations from leaving the workspace."
+};
+
 export const demoSourceVerificationReport: SourceVerificationReport = {
   deckId: "deck_nova_q3",
   passes: false,
@@ -348,6 +361,7 @@ export const demoSourceVerificationReport: SourceVerificationReport = {
   evidenceSources: sourceEvidence,
   verifiedClaims: sourceVerifiedClaims,
   issues: sourceVerificationIssues,
+  exportGuard: sourceExportGuard,
   boardReadinessGates
 };
 

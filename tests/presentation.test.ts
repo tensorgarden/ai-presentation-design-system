@@ -264,4 +264,24 @@ describe("source verification report", () => {
       expect(reviewIssueKeys.has(`${gate.slideId}:${gate.claim}`)).toBe(true);
     }
   });
+
+  it("blocks deck export while source issues block external use", () => {
+    const guard = demoSourceVerificationReport.exportGuard;
+    const blockingIssues = demoSourceVerificationReport.issues.filter(issue => issue.blocksExternalUse);
+    const blockingSlideIds = Array.from(new Set(blockingIssues.map(issue => issue.slideId)));
+
+    expect(guard.status).toBe("blocked");
+    expect(guard.blockedClaimCount).toBe(blockingIssues.length);
+    expect(guard.blockedSlideIds).toEqual(blockingSlideIds);
+    expect(guard.reason).toMatch(/export|share-link|source/i);
+  });
+
+  it("routes the export guard to the active board-readiness approver", () => {
+    const blockedGate = demoSourceVerificationReport.boardReadinessGates.find(gate => gate.status === "blocked");
+
+    expect(blockedGate).toBeDefined();
+    expect(demoSourceVerificationReport.exportGuard.nextReviewer).toBe(blockedGate?.requiredApprover);
+    expect(demoSourceVerificationReport.exportGuard.dueBy).toBe(blockedGate?.dueBy);
+    expect(Date.parse(demoSourceVerificationReport.exportGuard.dueBy)).not.toBeNaN();
+  });
 });

@@ -12,6 +12,8 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 const slideIcons: Record<string, string> = { title: "📌", narrative: "📖", comparison: "⚖️", timeline: "📅", metric: "📊", evidence: "🔍", cta: "🎯" };
 
 export default function Home() {
+  const exportGuard = demoSourceVerificationReport.exportGuard;
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-5 py-8 md:px-8 lg:px-10 bg-slate-50">
       {/* HEADER */}
@@ -173,6 +175,22 @@ export default function Home() {
             <Badge tone={demoSourceVerificationReport.boardReadinessGates.some(gate => gate.status === "blocked") ? "red" : "green"}>
               {demoSourceVerificationReport.boardReadinessGates.length} review gate
             </Badge>
+          </div>
+        </div>
+        <div className={`mt-4 rounded-2xl border p-4 ${exportGuard.status === "blocked" ? "border-red-200 bg-red-50/40" : exportGuard.status === "review-required" ? "border-amber-200 bg-amber-50/40" : "border-emerald-200 bg-emerald-50/30"}`}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Pre-export citation guard</p>
+            <Badge tone={exportGuard.status === "blocked" ? "red" : exportGuard.status === "review-required" ? "amber" : "green"}>
+              {exportGuard.status.replace("-", " ")}
+            </Badge>
+          </div>
+          <p className="mt-2 text-sm font-semibold text-slate-900">{exportGuard.callout}</p>
+          <p className="mt-1 text-xs leading-5 text-slate-600">{exportGuard.reason}</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
+            <span className="rounded-full bg-white/70 px-3 py-1">Blocked claims: {exportGuard.blockedClaimCount}</span>
+            <span className="rounded-full bg-white/70 px-3 py-1">Slides: {exportGuard.blockedSlideIds.join(", ")}</span>
+            <span className="rounded-full bg-white/70 px-3 py-1">Reviewer: {exportGuard.nextReviewer}</span>
+            <span className="rounded-full bg-white/70 px-3 py-1">Due: {exportGuard.dueBy}</span>
           </div>
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-3">

@@ -56,6 +56,7 @@ export interface StructureAuditReport {
 
 export type SourceVerificationStatus = "verified" | "needs-review" | "missing-source";
 export type SourceFreshnessStatus = "current" | "expires-soon" | "stale";
+export type SourceExportStatus = "blocked" | "review-required" | "approved";
 
 export interface SourceEvidence {
   id: string;
@@ -101,6 +102,17 @@ export interface BoardReadinessGate {
   blockingReason: string;
 }
 
+export interface SourceExportGuard {
+  deckId: string;
+  status: SourceExportStatus;
+  blockedClaimCount: number;
+  blockedSlideIds: string[];
+  reason: string;
+  nextReviewer: string;
+  dueBy: string;
+  callout: string;
+}
+
 export interface SourceVerificationReport {
   deckId: string;
   passes: boolean;
@@ -110,6 +122,7 @@ export interface SourceVerificationReport {
   evidenceSources: SourceEvidence[];
   verifiedClaims: SourceVerifiedClaim[];
   issues: SourceVerificationIssue[];
+  exportGuard: SourceExportGuard;
   boardReadinessGates: BoardReadinessGate[];
 }
 
