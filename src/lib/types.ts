@@ -74,6 +74,8 @@ export interface SourceVerifiedClaim {
   slideId: string;
   claim: string;
   evidenceId: string;
+  evidenceExcerpt: string;
+  supportLevel: "direct" | "partial" | "contextual";
   status: SourceVerificationStatus;
   confidence: number;
   reviewedBy: string;

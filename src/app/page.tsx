@@ -205,7 +205,10 @@ export default function Home() {
                 <p className="mt-2 text-sm font-semibold text-slate-900">{claim.claim}</p>
                 <p className="mt-2 text-xs leading-5 text-slate-500">Source: {source?.title ?? "Missing source"}</p>
                 <p className="mt-1 text-xs leading-5 text-slate-500">Anchor: {source?.location ?? "Missing anchor"}</p>
-                <p className="mt-1 text-xs text-slate-400">Freshness: {source?.freshnessStatus ?? "unknown"} · expires {source?.expiresAt ?? "n/a"}</p>
+                <blockquote className="mt-2 border-l-2 border-emerald-300 pl-2 text-xs leading-5 text-slate-600">
+                  “{claim.evidenceExcerpt}”
+                </blockquote>
+                <p className="mt-1 text-xs text-slate-400">Support: {claim.supportLevel} · freshness: {source?.freshnessStatus ?? "unknown"} · expires {source?.expiresAt ?? "n/a"}</p>
                 <p className="mt-1 text-xs text-slate-400">Reviewed by {claim.reviewedBy} on {claim.lastChecked}</p>
               </div>
             );

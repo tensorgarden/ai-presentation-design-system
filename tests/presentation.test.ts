@@ -195,6 +195,21 @@ describe("source verification report", () => {
     }
   });
 
+  it("requires claim-level evidence excerpts rather than source-only citations", () => {
+    for (const claim of demoSourceVerificationReport.verifiedClaims) {
+      expect(claim.evidenceExcerpt.trim().length).toBeGreaterThan(30);
+      expect(claim.supportLevel).toBe("direct");
+    }
+  });
+
+  it("keeps evidence excerpts distinct from source locations", () => {
+    const sources = new Map(demoSourceVerificationReport.evidenceSources.map(source => [source.id, source]));
+
+    for (const claim of demoSourceVerificationReport.verifiedClaims) {
+      expect(claim.evidenceExcerpt).not.toBe(sources.get(claim.evidenceId)?.location);
+    }
+  });
+
   it("fails the report when a board-facing financial claim still needs review", () => {
     expect(demoSourceVerificationReport.passes).toBe(false);
     expect(demoSourceVerificationReport.claimsNeedingReview).toBeGreaterThanOrEqual(1);
