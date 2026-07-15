@@ -99,6 +99,25 @@ describe("accessibility report", () => {
     expect(criticals.length).toBeGreaterThanOrEqual(1);
   });
 
+  it("flags complex layouts whose exported reading order breaks the visual sequence", () => {
+    const readingOrderIssues = demoAccessibilityReport.issues.filter(i => i.type === "reading-order");
+
+    expect(readingOrderIssues.length).toBeGreaterThanOrEqual(1);
+    for (const issue of readingOrderIssues) {
+      expect(issue.severity).toBe("critical");
+      expect(issue.description).toMatch(/screen-reader|sequence/i);
+    }
+  });
+
+  it("gives reading-order issues an explicit remediation sequence", () => {
+    const readingOrderIssues = demoAccessibilityReport.issues.filter(i => i.type === "reading-order");
+
+    for (const issue of readingOrderIssues) {
+      expect(issue.recommendation).toMatch(/phase 1.*phase 2.*phase 3/i);
+      expect(issue.recommendation).toMatch(/decorative|artifact/i);
+    }
+  });
+
   it("all issues reference valid slide IDs", () => {
     const slideIds = new Set(demoDeck.slides.map(s => s.id));
     for (const issue of demoAccessibilityReport.issues) {

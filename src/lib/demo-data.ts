@@ -70,6 +70,11 @@ const accessibilityIssues = [
     slideId: "s5", type: "alt-text" as const, severity: "major" as const,
     description: "Scatter plot has no alt text or accessible data table. Screen-reader users cannot interpret the CS staffing vs churn relationship.",
     recommendation: "Add descriptive alt text ('Scatter plot: CS hires per $1M ARR vs monthly churn rate, with benchmark line at 1.2 CS/$M ARR') and a linked data table."
+  },
+  {
+    slideId: "s6", type: "reading-order" as const, severity: "critical" as const,
+    description: "The three-phase timeline is visually arranged left to right, but its exported object order reads phase 3 before phase 1. Screen-reader users hear the intervention plan out of sequence.",
+    recommendation: "Set the reading order to title, phase 1, phase 2, phase 3, target metric, then decorative elements; mark decorative connectors as artifacts before export."
   }
 ];
 
