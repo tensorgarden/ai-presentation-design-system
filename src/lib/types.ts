@@ -151,7 +151,7 @@ export interface ContentReview {
 
 export interface AccessibilityIssue {
   slideId: string;
-  type: "contrast" | "font-size" | "alt-text" | "color-blind" | "reading-order";
+  type: "contrast" | "font-size" | "alt-text" | "color-blind" | "reading-order" | "link-text";
   severity: "minor" | "major" | "critical";
   description: string;
   recommendation: string;

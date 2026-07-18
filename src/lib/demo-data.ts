@@ -75,6 +75,11 @@ const accessibilityIssues = [
     slideId: "s6", type: "reading-order" as const, severity: "critical" as const,
     description: "The three-phase timeline is visually arranged left to right, but its exported object order reads phase 3 before phase 1. Screen-reader users hear the intervention plan out of sequence.",
     recommendation: "Set the reading order to title, phase 1, phase 2, phase 3, target metric, then decorative elements; mark decorative connectors as artifacts before export."
+  },
+  {
+    slideId: "s8", type: "link-text" as const, severity: "major" as const,
+    description: "The CTA uses a generic 'View details' hyperlink label with no destination context. When screen-reader users scan the deck's list of links, they cannot tell that it opens the advisor-program approval memo.",
+    recommendation: "Rename the link 'Review the embedded CS advisor approval memo' and add the ScreenTip 'Opens the advisor-program approval memo in the portfolio data room.'"
   }
 ];
 

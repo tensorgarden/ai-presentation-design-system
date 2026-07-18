@@ -118,6 +118,27 @@ describe("accessibility report", () => {
     }
   });
 
+  it("flags hyperlink labels that lose meaning when read standalone", () => {
+    const linkTextIssues = demoAccessibilityReport.issues.filter(i => i.type === "link-text");
+
+    expect(linkTextIssues.length).toBeGreaterThanOrEqual(1);
+    for (const issue of linkTextIssues) {
+      expect(issue.severity).toMatch(/major|critical/);
+      expect(issue.description).toMatch(/screen-reader|list of links/i);
+      expect(demoDeck.slides.find(slide => slide.id === issue.slideId)?.contentType).toBe("cta");
+    }
+  });
+
+  it("gives ambiguous links destination-specific text and a ScreenTip", () => {
+    const linkTextIssues = demoAccessibilityReport.issues.filter(i => i.type === "link-text");
+
+    for (const issue of linkTextIssues) {
+      expect(issue.recommendation).toMatch(/approval memo/i);
+      expect(issue.recommendation).toMatch(/ScreenTip/i);
+      expect(issue.recommendation).not.toMatch(/'View details'|'Click here'|'Learn more'/i);
+    }
+  });
+
   it("all issues reference valid slide IDs", () => {
     const slideIds = new Set(demoDeck.slides.map(s => s.id));
     for (const issue of demoAccessibilityReport.issues) {
