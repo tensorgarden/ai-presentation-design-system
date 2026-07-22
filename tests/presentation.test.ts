@@ -139,6 +139,28 @@ describe("accessibility report", () => {
     }
   });
 
+  it("flags visual headings that are not exported as navigable slide titles", () => {
+    const slideTitleIssues = demoAccessibilityReport.issues.filter(i => i.type === "slide-title");
+
+    expect(slideTitleIssues.length).toBeGreaterThanOrEqual(1);
+    for (const issue of slideTitleIssues) {
+      expect(issue.severity).toMatch(/major|critical/);
+      expect(issue.description).toMatch(/title placeholder|untitled|Outline view/i);
+    }
+  });
+
+  it("requires slide-title remediation to preserve a unique navigable title", () => {
+    const slideTitleIssues = demoAccessibilityReport.issues.filter(i => i.type === "slide-title");
+
+    for (const issue of slideTitleIssues) {
+      const slide = demoDeck.slides.find(item => item.id === issue.slideId);
+      expect(slide).toBeDefined();
+      expect(issue.recommendation).toContain(slide?.title);
+      expect(issue.recommendation).toMatch(/unique slide title placeholder/i);
+      expect(issue.recommendation).toMatch(/off-slide|hidden/i);
+    }
+  });
+
   it("all issues reference valid slide IDs", () => {
     const slideIds = new Set(demoDeck.slides.map(s => s.id));
     for (const issue of demoAccessibilityReport.issues) {

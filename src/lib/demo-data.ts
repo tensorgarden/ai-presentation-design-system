@@ -80,6 +80,11 @@ const accessibilityIssues = [
     slideId: "s8", type: "link-text" as const, severity: "major" as const,
     description: "The CTA uses a generic 'View details' hyperlink label with no destination context. When screen-reader users scan the deck's list of links, they cannot tell that it opens the advisor-program approval memo.",
     recommendation: "Rename the link 'Review the embedded CS advisor approval memo' and add the ScreenTip 'Opens the advisor-program approval memo in the portfolio data room.'"
+  },
+  {
+    slideId: "s7", type: "slide-title" as const, severity: "major" as const,
+    description: "Slide 7's visible ROI heading is a freeform text box rather than the slide's title placeholder. Screen-reader and Outline view navigation can report the slide as untitled even though sighted viewers see a heading.",
+    recommendation: "Set 'Projected Impact: $2.1M Annual Revenue Saved' as the unique slide title placeholder; if the visual layout cannot accommodate it, keep the title in an off-slide hidden title placeholder rather than a decorative text box."
   }
 ];
 
