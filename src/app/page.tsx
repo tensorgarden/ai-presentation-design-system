@@ -20,6 +20,7 @@ export default function Home() {
   const focusOrderIssues = demoAccessibilityReport.issues.filter(issue => issue.type === "focus-order");
   const focusVisibilityIssues = demoAccessibilityReport.issues.filter(issue => issue.type === "focus-not-obscured");
   const altTextIssues = demoAccessibilityReport.issues.filter(issue => issue.type === "alt-text");
+  const textSpacingIssues = demoAccessibilityReport.issues.filter(issue => issue.type === "text-spacing");
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-5 py-8 md:px-8 lg:px-10 bg-slate-50">
@@ -439,6 +440,34 @@ export default function Home() {
                 <Badge tone="red">{issue.criterion}</Badge>
               </div>
               <p className="mt-2 text-sm font-semibold text-slate-900">{issue.focusedElement} is {issue.visibility.replace("-", " ")} by {issue.obscuredBy.replace("-", " ")}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">{issue.description}</p>
+              <p className="mt-2 text-xs font-medium leading-5 text-red-800">Remediation: {issue.recommendation}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* TEXT SPACING */}
+      <Card>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-slate-950">Text spacing resilience</h2>
+            <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">
+              Export review checks that user-applied text-spacing overrides do not cause clipped, overlapped, or unreadable slide content.
+            </p>
+          </div>
+          <Badge tone={textSpacingIssues.length > 0 ? "red" : "green"}>
+            {textSpacingIssues.length > 0 ? `${textSpacingIssues.length} reflow gaps` : "text spacing ready"}
+          </Badge>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {textSpacingIssues.map(issue => (
+            <div key={`${issue.slideId}-text-spacing`} className="rounded-2xl border border-red-200 bg-red-50/40 p-4">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-red-800">Slide {issue.slideId} · WCAG 1.4.12</span>
+                <Badge tone="red">{issue.severity}</Badge>
+              </div>
+              <p className="mt-2 text-sm font-semibold text-slate-900">Spacing override causes reflow risk</p>
               <p className="mt-1 text-xs leading-5 text-slate-600">{issue.description}</p>
               <p className="mt-2 text-xs font-medium leading-5 text-red-800">Remediation: {issue.recommendation}</p>
             </div>

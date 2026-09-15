@@ -446,6 +446,17 @@ describe("accessibility report", () => {
       expect(issue.recommendation).not.toMatch(/consider|maybe/i);
     }
   });
+
+  it("flags text spacing overrides that make exported slide content collide", () => {
+    const textSpacingIssues = demoAccessibilityReport.issues.filter(issue => issue.type === "text-spacing");
+
+    expect(textSpacingIssues.length).toBeGreaterThanOrEqual(1);
+    for (const issue of textSpacingIssues) {
+      expect(issue.severity).toMatch(/major|critical/);
+      expect(issue.description).toMatch(/line spacing|letter spacing|text spacing/i);
+      expect(issue.recommendation).toMatch(/exported presentation|text spacing/i);
+    }
+  });
 });
 
 describe("content density report", () => {

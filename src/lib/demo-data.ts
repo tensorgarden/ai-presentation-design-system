@@ -195,6 +195,11 @@ const accessibilityIssues: AccessibilityIssue[] = [
     description: "The exported share-link build renders the next-slide arrow at 18 by 18 CSS pixels against the 24 by 24 CSS pixel minimum, with only 10 CSS pixels to the adjacent pause control. The undersized targets are close enough to increase accidental activation risk for people with limited dexterity, and the presentation has no documented spacing exception.",
     recommendation: "Increase the next-slide arrow to at least 24×24 CSS pixels and preserve at least 24 CSS pixels of clearance from the pause control. Verify the computed target dimensions and spacing in the exported share link, not only in the editor preview."
   },
+  {
+    slideId: "s2", type: "text-spacing" as const, severity: "major" as const,
+    description: "The exported context slide applies a fixed 1.0 line-height and compressed letter spacing to fit 47 words into the metric-card layout. When users increase text spacing, labels collide with the adjacent metric cards and two lines become unreadable.",
+    recommendation: "Remove fixed-height text boxes, support at least 1.5 line spacing and 0.12em letter spacing, then verify the reflowed content in the exported presentation at 200% text spacing rather than only in the editor preview."
+  },
 ];
 
 export const demoAccessibilityReport: AccessibilityReport = {

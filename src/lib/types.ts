@@ -149,7 +149,7 @@ export interface ContentReview {
   timeEstimate: string;
 }
 
-export type AccessibilityIssueType = "contrast" | "font-size" | "alt-text" | "color-blind" | "reading-order" | "link-text" | "slide-title" | "motion" | "table-structure" | "focus-order" | "focus-not-obscured" | "language-declaration" | "target-size";
+export type AccessibilityIssueType = "contrast" | "font-size" | "alt-text" | "color-blind" | "reading-order" | "link-text" | "slide-title" | "motion" | "table-structure" | "focus-order" | "focus-not-obscured" | "language-declaration" | "target-size" | "text-spacing";
 
 interface AccessibilityIssueBase {
   slideId: string;
